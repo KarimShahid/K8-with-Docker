@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nba-memes-deployment
+  labels:
+    app: nba-memes
+spec:
+  replicas: 1  # no of pods
+  selector:
+    matchLabels:
+      app: nba-memes
+  template:
+    metadata:
+      labels:
+        app: nba-memes
+    spec:
+      containers:
+        - name: nba-memes
+          image: karimshahid/nba-memes:latest    # Private Docker Hub image
+          ports:
+            - containerPort: 80      # containerPort must match the port the app is actually listening on.
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 20
+      imagePullSecrets:
+        - name: my-dockerhub-secret   # reference the secret we created
+        

@@ -1,0 +1,8 @@
+services:
+  web:
+    build: .
+    image: karimshahid/nba-memes:latest
+    container_name: nba-memes
+    ports:
+      - 80:80   # Host:Container
+    restart: unless-stopped 
